@@ -1,0 +1,12 @@
+/* 
+  Localizable.strings
+  ContactList
+
+  Created by Bogdan on 27.06.2022.
+  
+*/
+
+
+"contacts_list_title" = "Contacte";
+"no_contacts" = "Nu exista niciun contact";
+"section_title" = "Contactele mele";
