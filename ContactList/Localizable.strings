@@ -1,10 +1,10 @@
 /* 
-  Localizable.strings
-  ContactList
-
-  Created by Bogdan on 27.06.2022.
-  
-*/
+ Localizable.strings
+ ContactList
+ 
+ Created by Bogdan on 27.06.2022.
+ 
+ */
 
 
 "contacts_list_title" = "Contacte";
@@ -20,3 +20,7 @@
 "first_name_error" = "Numele este obligatoriu";
 "last_name_error" = "Prenumele este obligatoriu";
 "phone_number_error" = "Numărul nu este corect";
+"error_title" = "Eroare";
+"error_message" = "A apărut o eroare. Incercați mai târziu!";
+"alert_title" = "OK";
+

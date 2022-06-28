@@ -14,9 +14,9 @@ class ContactTableViewCell: UITableViewCell {
         imgView.translatesAutoresizingMaskIntoConstraints = false
         return imgView
     }()
-
+    
     lazy var separator: UIView = {
-       let separator = UIView()
+        let separator = UIView()
         separator.backgroundColor = UIColor.customLightGray1
         separator.translatesAutoresizingMaskIntoConstraints = false
         return separator
@@ -24,7 +24,7 @@ class ContactTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-    
+        
         self.imageView?.image = UIImage(color: UIColor.customLightGray3, size: CGSize(width: 46, height: 46))
         self.imageView?.layer.cornerRadius = 23
         self.imageView?.layer.masksToBounds = true
@@ -49,10 +49,10 @@ class ContactTableViewCell: UITableViewCell {
             
             textLabel!.leftAnchor.constraint(equalTo: leftAnchor, constant: 86),
             textLabel!.centerYAnchor.constraint(equalTo: centerYAnchor),
-
+            
             rightImage.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -24),
             rightImage.centerYAnchor.constraint(equalTo: centerYAnchor),
-
+            
             separator.leftAnchor.constraint(equalTo: self.contentView.leftAnchor),
             separator.rightAnchor.constraint(equalTo: self.contentView.rightAnchor),
             separator.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
@@ -64,7 +64,7 @@ class ContactTableViewCell: UITableViewCell {
     func setContactName(contactName name: String) {
         self.textLabel?.text = name
     }
-
+    
     func setContactInitialsImage(contactInitials initials: String) {        
         let initialsLabel = UILabel()
         initialsLabel.text = initials

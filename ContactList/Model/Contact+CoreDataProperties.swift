@@ -11,7 +11,7 @@ import CoreData
 
 
 extension Contact {
-
+    
     @nonobjc public class func createFetchRequest() -> NSFetchRequest<Contact> {
         return NSFetchRequest<Contact>(entityName: "Contact")
     }
@@ -36,7 +36,7 @@ extension Contact {
         request.fetchLimit = 1
         return request
     }
-
+    
     @NSManaged public var firstName: String?
     @NSManaged public var lastName: String?
     @NSManaged public var phoneNumber: String?

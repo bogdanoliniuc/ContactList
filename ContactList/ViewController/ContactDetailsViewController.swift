@@ -16,7 +16,7 @@ class ContactDetailsViewController: UIViewController {
     
     private var contact: [String: Any]?
     
-    private var delegate: ModalDismissProtocol? = nil
+    weak private var delegate: ModalDismissProtocol? = nil
     
     private lazy var contentView: UIView = {
         let view = UIView()
@@ -136,13 +136,13 @@ class ContactDetailsViewController: UIViewController {
         if contact == nil {
             contact = [:]
         }
-    
+        
         contact?["firstName"] = firstName
         contact?["lastName"] = lastName
         contact?["phoneNumber"] = phoneNumber
         contact?["email"] = emailTextField.getTextFieldText()
         contact?["status"] = "active" //considering status = 'active' for testing
-
+        
         contactsProvider.saveContact(contact: contact!)
         
         self.dismiss(animated: true) { [unowned self] in
@@ -173,12 +173,12 @@ extension ContactDetailsViewController {
         self.view.addSubview(contentView)
         
         let guide = view.safeAreaLayoutGuide
-         NSLayoutConstraint.activate([
+        NSLayoutConstraint.activate([
             contentView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
             contentView.topAnchor.constraint(equalToSystemSpacingBelow: guide.topAnchor, multiplier: 1.0),
             contentView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
-         ])
+        ])
         
         contentView.addSubview(firstNameTextField)
         contentView.addSubview(lastNameTextField)
@@ -191,7 +191,7 @@ extension ContactDetailsViewController {
             firstNameTextField.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
             firstNameTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             firstNameTextField.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16),
-
+            
             lastNameTextField.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
             lastNameTextField.topAnchor.constraint(equalTo: firstNameTextField.bottomAnchor, constant: 24),
             lastNameTextField.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16),
@@ -222,7 +222,9 @@ extension ContactDetailsViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         var fullString = textField.text ?? ""
         fullString.append(string)
-        if range.length == 1 { //delete action
+        
+        //delete action
+        if range.length == 1 {
             let end = fullString.index(fullString.startIndex, offsetBy: fullString.count-1)
             fullString = String(fullString[fullString.startIndex..<end])
             textField.text = fullString

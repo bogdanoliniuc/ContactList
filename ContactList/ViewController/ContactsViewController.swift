@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol ModalDismissProtocol {
+protocol ModalDismissProtocol: AnyObject {
     func updateUIAfterDismiss()
 }
 
@@ -82,9 +82,8 @@ class ContactsViewController: UIViewController {
                 if let contactsArray = contactsArray {
                     self.contacts = contactsArray
                     self.tableView.reloadData()
-                        
-                }else if let error = error {
-                    //TODO: show error
+                }else if error != nil {
+                    showErrorAlert()
                 }
                 self.noContactsLabel.isHidden = !self.contacts.isEmpty
             }
@@ -97,6 +96,12 @@ class ContactsViewController: UIViewController {
         let navController = UINavigationController(rootViewController: contactDetailsViewController)
         self.present(navController, animated: true)
     }
+    
+    fileprivate func showErrorAlert() {
+        let alert = UIAlertController(title: NSLocalizedString("error_title", comment: ""), message: NSLocalizedString("error_message", comment: ""), preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("alert_title", comment: ""), style: UIAlertAction.Style.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
 }
 
 extension ContactsViewController: UITableViewDataSource {
@@ -104,7 +109,7 @@ extension ContactsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.contacts.count
     }
-        
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let contactCell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier)! as! ContactTableViewCell
         let firstName = contacts[indexPath.row]["firstName"] as? String
@@ -122,8 +127,8 @@ extension ContactsViewController: UITableViewDataSource {
                         DispatchQueue.main.async {
                             contactCell.setContactImage(contactImage: image!)
                         }
-                    } else if let error = error {
-                        //TODO: show error
+                    } else if error != nil {
+                        self.showErrorAlert()
                     }
                 }
             }
@@ -150,7 +155,7 @@ extension ContactsViewController: UITableViewDelegate {
         label.text = NSLocalizedString("section_title", comment: "").uppercased()
         label.textColor = UIColor.customLightGray2
         view.addSubview(label)
-
+        
         NSLayoutConstraint.activate([
             label.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 24),
             label.topAnchor.constraint(equalTo: view.topAnchor, constant: -11),

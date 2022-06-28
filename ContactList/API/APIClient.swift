@@ -14,7 +14,7 @@ class APIClient {
     
     func getContacts(_ completionBlock: @escaping (Array<Any>?, Error?) -> Void) {
         let url = URL(string: contactsURLString)!
-
+        
         let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
             guard let data = data else {
                 completionBlock(nil, error)
@@ -26,13 +26,13 @@ class APIClient {
             
             completionBlock(contactsArray, nil)
         }
-
+        
         task.resume()
     }
     
     func getContactImage(_ completionBlock: @escaping (Data?, Error?) -> Void) {
         let url = URL(string: contactImageURLString)!
-
+        
         let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
             guard let data = data else {
                 completionBlock(nil, error)
@@ -41,7 +41,7 @@ class APIClient {
             
             completionBlock(data, nil)
         }
-
+        
         task.resume()
     }
 }

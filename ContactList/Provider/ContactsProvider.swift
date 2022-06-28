@@ -18,11 +18,31 @@ class ContactsProvider {
         container = NSPersistentContainer(name: "ContactList")
         container.loadPersistentStores { storeDescription, error in
             self.container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-
+            
             if let error = error {
                 print("Unresolved error \(error)")
             }
         }
+    }
+    
+    func getContactsFromAPI(_ completionBlock: @escaping ([NSDictionary]?, Error?) -> Void) {
+        self.apiClient.getContacts({ jsonContacts, error in
+            if let jsonContacts = jsonContacts {
+                for jsonContact in jsonContacts {
+                    _ = self.configureContact(usingJSON: jsonContact as! [String : Any])
+                }
+                
+                self.saveContext()
+                
+                self.loadSavedContacts({ contacts in
+                    if let contacts = contacts {
+                        completionBlock(contacts, nil)
+                    }
+                })
+            } else if let error = error {
+                completionBlock(nil, error)
+            }
+        })
     }
     
     func getContacts(_ completionBlock: @escaping ([NSDictionary]?, Error?) -> Void) {
@@ -34,37 +54,22 @@ class ContactsProvider {
                 }
             }
             
-            self.apiClient.getContacts({ jsonContacts, error in
-                if let jsonContacts = jsonContacts {
-                    for jsonContact in jsonContacts {
-                        let contact = Contact(context: self.container.viewContext)
-                        self.configure(contact: contact, usingJSON: jsonContact as! [String : Any])
-                    }
-
-                    self.saveContext()
-                    
-                    self.loadSavedContacts({ contacts in
-                        if let contacts = contacts {
-                            completionBlock(contacts, nil)
-                        }
-                    })
-                } else if let error = error {
-                    completionBlock(nil, error)
-                }
-            })
+            self.getContactsFromAPI { contacts, error in
+                completionBlock(contacts, error)
+            }
         }
     }
     
     func getContactForId(id: Int64) -> NSDictionary? {
         let request = Contact.createContactFetchRequest(forId: id)
-            
+        
         do {
             let contacts = try container.viewContext.fetch(request)
             return contacts[0]
         } catch {
             print("Fetch failed")
         }
-            
+        
         return nil
     }
     
@@ -105,9 +110,10 @@ class ContactsProvider {
             }
         }
     }
-
-    func configure(contact: Contact, usingJSON json: [String: Any]) {
+    
+    func configureContact(usingJSON json: [String: Any]) -> Contact {
         let name = (json["name"] as! String).components(separatedBy: " ")
+        let contact = Contact(context: self.container.viewContext)
         contact.firstName = name[0]
         contact.lastName = name.count > 1 ? name[1] : ""
         contact.email = json["email"] as? String
@@ -115,6 +121,8 @@ class ContactsProvider {
         contact.gender = json["gender"] as? String
         contact.status = json["status"] as? String
         contact.id = json["id"] as! Int64
+        
+        return contact
     }
     
     func getContactImage(_ completionBlock: @escaping (Data?, Error?) -> Void) {
@@ -135,12 +143,12 @@ class ContactsProvider {
         guard let regex = try? NSRegularExpression(pattern: "[\\sa-zA-Z]", options: .caseInsensitive) else { return "" }
         let r = NSString(string: phoneNumber).range(of: phoneNumber)
         var number = regex.stringByReplacingMatches(in: phoneNumber, options: .init(rawValue: 0), range: r, withTemplate: "")
-
+        
         if number.count > 10 {
             let tenthDigitIndex = number.index(number.startIndex, offsetBy: 10)
             number = String(number[number.startIndex..<tenthDigitIndex])
         }
-
+        
         if number.count <= 7 {
             let end = number.index(number.startIndex, offsetBy: number.count)
             let range = number.startIndex..<end
@@ -150,7 +158,7 @@ class ContactsProvider {
             let range = number.startIndex..<end
             number = number.replacingOccurrences(of: "([0-9]{4})([0-9]{3})([0-9])", with: "$1 $2 $3", options: .regularExpression, range: range)
         }
-
+        
         return number
     }
     
@@ -162,20 +170,17 @@ class ContactsProvider {
         req.propertiesToFetch = ["id"]
         let indexSort = NSSortDescriptor.init(key: "id", ascending: false)
         req.sortDescriptors = [indexSort]
-
+        
         do {
             let fetchedData = try context.fetch(req)
-            let firstObject = fetchedData.first as! NSManagedObject
-            if let foundValue = firstObject.value(forKey: "id") as? NSNumber {
+            let firstObject = fetchedData.first as? NSManagedObject
+            if let foundValue = firstObject?.value(forKey: "id") as? NSNumber {
                 return NSNumber.init(value: foundValue.intValue + 1) as? Int64
             }
-
-            } catch {
-                print(error)
-
-            }
+        } catch {
+            print(error)
+        }
         return nil
-
     }
 }
 

@@ -12,7 +12,6 @@
 		4382BCCB2869905B0098E181 /* ContactList.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4382BCC92869905B0098E181 /* ContactList.xcdatamodeld */; };
 		4382BCCD2869905D0098E181 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4382BCCC2869905D0098E181 /* Assets.xcassets */; };
 		4382BCD02869905D0098E181 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4382BCCE2869905D0098E181 /* LaunchScreen.storyboard */; };
-		4382BCDB2869905D0098E181 /* ContactListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4382BCDA2869905D0098E181 /* ContactListTests.swift */; };
 		4382BCE52869905D0098E181 /* ContactListUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4382BCE42869905D0098E181 /* ContactListUITests.swift */; };
 		4382BCE72869905D0098E181 /* ContactListUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4382BCE62869905D0098E181 /* ContactListUITestsLaunchTests.swift */; };
 		4382BCF8286992AB0098E181 /* ContactsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4382BCF7286992AB0098E181 /* ContactsProvider.swift */; };
@@ -27,6 +26,8 @@
 		4382BD1C286AD5030098E181 /* ContactDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4382BD1B286AD5030098E181 /* ContactDetailsViewController.swift */; };
 		4382BD1E286AF37A0098E181 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4382BD1D286AF37A0098E181 /* CustomTextField.swift */; };
 		4382BD20286B11DA0098E181 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4382BD1F286B11DA0098E181 /* Provider.swift */; };
+		4382BD25286B5F380098E181 /* ContactsProviderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4382BD24286B5F380098E181 /* ContactsProviderTest.swift */; };
+		4382BD28286B63BB0098E181 /* APIClientTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4382BD27286B63BB0098E181 /* APIClientTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,7 +56,6 @@
 		4382BCCF2869905D0098E181 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4382BCD12869905D0098E181 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4382BCD62869905D0098E181 /* ContactListTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ContactListTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4382BCDA2869905D0098E181 /* ContactListTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListTests.swift; sourceTree = "<group>"; };
 		4382BCE02869905D0098E181 /* ContactListUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ContactListUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4382BCE42869905D0098E181 /* ContactListUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListUITests.swift; sourceTree = "<group>"; };
 		4382BCE62869905D0098E181 /* ContactListUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListUITestsLaunchTests.swift; sourceTree = "<group>"; };
@@ -71,6 +71,8 @@
 		4382BD1B286AD5030098E181 /* ContactDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailsViewController.swift; sourceTree = "<group>"; };
 		4382BD1D286AF37A0098E181 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		4382BD1F286B11DA0098E181 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
+		4382BD24286B5F380098E181 /* ContactsProviderTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsProviderTest.swift; sourceTree = "<group>"; };
+		4382BD27286B63BB0098E181 /* APIClientTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClientTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,7 +143,8 @@
 		4382BCD92869905D0098E181 /* ContactListTests */ = {
 			isa = PBXGroup;
 			children = (
-				4382BCDA2869905D0098E181 /* ContactListTests.swift */,
+				4382BD26286B63800098E181 /* API */,
+				4382BD23286B5F190098E181 /* Provider */,
 			);
 			path = ContactListTests;
 			sourceTree = "<group>";
@@ -214,6 +217,22 @@
 				4382BD1D286AF37A0098E181 /* CustomTextField.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		4382BD23286B5F190098E181 /* Provider */ = {
+			isa = PBXGroup;
+			children = (
+				4382BD24286B5F380098E181 /* ContactsProviderTest.swift */,
+			);
+			path = Provider;
+			sourceTree = "<group>";
+		};
+		4382BD26286B63800098E181 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				4382BD27286B63BB0098E181 /* APIClientTest.swift */,
+			);
+			path = API;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -368,7 +387,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4382BCDB2869905D0098E181 /* ContactListTests.swift in Sources */,
+				4382BD28286B63BB0098E181 /* APIClientTest.swift in Sources */,
+				4382BD25286B5F380098E181 /* ContactsProviderTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -535,6 +555,8 @@
 				INFOPLIST_FILE = ContactList/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -561,6 +583,8 @@
 				INFOPLIST_FILE = ContactList/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
