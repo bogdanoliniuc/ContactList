@@ -8,5 +8,15 @@
 
 
 "contacts_list_title" = "Contacte";
-"no_contacts" = "Nu exista niciun contact";
+"no_contacts" = "Nu există niciun contact";
 "section_title" = "Contactele mele";
+"contact_details_title" = "Adaugă contact";
+"button_save_title" = "Salvează";
+"button_update_title" = "Modifică";
+"first_name" = "Nume";
+"last_name" = "Prenume";
+"phone_number" = "Telefon";
+"email_address" = "Email";
+"first_name_error" = "Numele este obligatoriu";
+"last_name_error" = "Prenumele este obligatoriu";
+"phone_number_error" = "Numărul nu este corect";

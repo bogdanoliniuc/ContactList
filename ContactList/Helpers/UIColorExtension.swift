@@ -28,4 +28,6 @@ extension UIColor {
     static let customLightGray1 = UIColor(rgb: 0xEFF2F7)
     static let customLightGray2 = UIColor(rgb: 0x98A5BE)
     static let customLightGray3 = UIColor(rgb: 0xC1C8D7)
+    static let customGreen      = UIColor(rgb: 0x2CC84D)
+    static let errorColor       = UIColor(rgb: 0xFF5151)
 }

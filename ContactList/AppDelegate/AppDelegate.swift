@@ -15,7 +15,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        let viewController = ContactsViewController()
+        let provider = Provider()
+        
+        let viewController = ContactsViewController(contactsProvider: provider.getContactsProvider())
         
         window = UIWindow()
         window?.rootViewController = UINavigationController(rootViewController: viewController)

@@ -27,10 +27,7 @@ class ContactTableViewCell: UITableViewCell {
     
         self.imageView?.image = UIImage(color: UIColor.customLightGray3, size: CGSize(width: 46, height: 46))
         self.imageView?.layer.cornerRadius = 23
-        self.imageView?.layer.borderWidth = 1.0
-        self.imageView?.layer.masksToBounds = false
-        self.imageView?.layer.borderColor = UIColor.white.cgColor
-        self.imageView?.clipsToBounds = true
+        self.imageView?.layer.masksToBounds = true
         self.imageView?.translatesAutoresizingMaskIntoConstraints = false
         
         self.textLabel?.font = UIFont(name: "SFProText-Regular", size: 17)
@@ -76,6 +73,8 @@ class ContactTableViewCell: UITableViewCell {
         initialsLabel.font = UIFont.boldSystemFont(ofSize: 17)
         initialsLabel.translatesAutoresizingMaskIntoConstraints = false
         
+        self.imageView?.subviews.forEach({ $0.removeFromSuperview() })
+        self.imageView?.image = UIImage(color: UIColor.customLightGray3, size: CGSize(width: 46, height: 46))
         self.imageView?.addSubview(initialsLabel)
         
         NSLayoutConstraint.activate([

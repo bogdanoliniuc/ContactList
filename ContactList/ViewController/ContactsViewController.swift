@@ -7,13 +7,17 @@
 
 import UIKit
 
+protocol ModalDismissProtocol {
+    func updateUIAfterDismiss()
+}
+
 class ContactsViewController: UIViewController {
     
     let cellIdentifier = "contactCell"
     
-    var contacts = [Contact]()
+    var contacts = [NSDictionary]()
     
-    let contactsProvider = ContactsProvider()
+    let contactsProvider: ContactsProvider
     
     lazy var spinner: UIActivityIndicatorView = {
         var spinner = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.large)
@@ -23,6 +27,7 @@ class ContactsViewController: UIViewController {
     
     lazy var tableView: UITableView = {
         let tableView = UITableView()
+        tableView.backgroundColor = UIColor.customLightGray1
         tableView.dataSource = self
         tableView.delegate = self
         tableView.tableFooterView = UIView()
@@ -45,22 +50,32 @@ class ContactsViewController: UIViewController {
         label.isHidden = true
         return label
     }()
-
+    
+    init(contactsProvider: ContactsProvider) {
+        self.contactsProvider = contactsProvider
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupUI()
-        
-        getContacts(true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         setupNavItem()
+        
+        getContacts()
     }
     
-    func getContacts(_ cacheRequested: Bool) {
+    func getContacts() {
         contactsProvider.getContacts({ contactsArray, error in
             DispatchQueue.main.async { [unowned self] in
                 self.spinner.stopAnimating()
@@ -75,6 +90,13 @@ class ContactsViewController: UIViewController {
             }
         })
     }
+    
+    @objc func addContactTapped() {
+        let contactDetailsViewController = ContactDetailsViewController(contactsProvider: contactsProvider, contactId: nil)
+        contactDetailsViewController.setDelegate(self)
+        let navController = UINavigationController(rootViewController: contactDetailsViewController)
+        self.present(navController, animated: true)
+    }
 }
 
 extension ContactsViewController: UITableViewDataSource {
@@ -85,19 +107,24 @@ extension ContactsViewController: UITableViewDataSource {
         
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let contactCell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier)! as! ContactTableViewCell
-        contactCell.setContactName(contactName: "\(contacts[indexPath.row].firstName ?? "") \(contacts[indexPath.row].lastName ?? "")")
+        let firstName = contacts[indexPath.row]["firstName"] as? String
+        let lastName = contacts[indexPath.row]["lastName"] as? String
         
-        contactCell.setContactInitialsImage(contactInitials: "\(contacts[indexPath.row].firstName?.prefix(1).uppercased() ?? "")\(contacts[indexPath.row].lastName?.prefix(1).uppercased() ?? "")")
+        contactCell.setContactName(contactName: "\(firstName ?? "") \(lastName ?? "")")
         
-        if contacts[indexPath.row].id % 2 != 0 {
-            contactsProvider.getContactImage { imageData, error in
-                if let imageData = imageData {
-                    let image = UIImage(data: imageData, scale: 1.0)
-                    DispatchQueue.main.async { 
-                        contactCell.setContactImage(contactImage: image!)
+        contactCell.setContactInitialsImage(contactInitials: "\(firstName?.prefix(1).uppercased() ?? "")\(lastName?.prefix(1).uppercased() ?? "")")
+        
+        if let contactId = contacts[indexPath.row]["id"] as? Int64  {
+            if contactId % 2 != 0 {
+                contactsProvider.getContactImage { imageData, error in
+                    if let imageData = imageData {
+                        let image = UIImage(data: imageData, scale: 1.0)
+                        DispatchQueue.main.async {
+                            contactCell.setContactImage(contactImage: image!)
+                        }
+                    } else if let error = error {
+                        //TODO: show error
                     }
-                } else if let error = error {
-                    //TODO: show error
                 }
             }
         }
@@ -134,6 +161,15 @@ extension ContactsViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return self.contacts.isEmpty ? 0 : 38
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let contact = contacts[indexPath.row]
+        
+        let contactDetailsViewController = ContactDetailsViewController(contactsProvider: contactsProvider, contactId: contact["id"] as? Int64)
+        contactDetailsViewController.setDelegate(self)
+        let navController = UINavigationController(rootViewController: contactDetailsViewController)
+        self.present(navController, animated: true)
     }
 }
 
@@ -180,7 +216,7 @@ extension ContactsViewController {
         imageViewContainer.translatesAutoresizingMaskIntoConstraints = false
         imageViewContainer.layer.borderColor = UIColor.customLightGray1.cgColor
         imageViewContainer.layer.borderWidth = 2
-        imageViewContainer.layer.cornerRadius = 5
+        imageViewContainer.layer.cornerRadius = 7
         imageViewContainer.clipsToBounds = true
         imageViewContainer.addSubview(imageView)
         
@@ -202,8 +238,19 @@ extension ContactsViewController {
             imageViewContainer.heightAnchor.constraint(equalToConstant: 36),
             imageViewContainer.widthAnchor.constraint(equalToConstant: 36)
         ])
-
+        
+        let gesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(addContactTapped))
+        gesture.numberOfTapsRequired = 1
+        imageViewContainer.isUserInteractionEnabled = true
+        imageViewContainer.addGestureRecognizer(gesture)
+        
         spinner.startAnimating()
+    }
+}
+
+extension ContactsViewController: ModalDismissProtocol {
+    func updateUIAfterDismiss() {
+        getContacts()
     }
 }
 
